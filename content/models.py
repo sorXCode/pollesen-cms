@@ -27,7 +27,10 @@ class BaseTab(db.Model):
     }
 
     def __repr__(self):
-        return self.name
+        return "{}: {}".format(self.name, self.link)
+    
+    def __unicode__(self):
+        return self.__repr__()
 
 
 class Source(BaseTab):
