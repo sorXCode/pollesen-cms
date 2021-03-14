@@ -1,15 +1,21 @@
-from app import db
-from sqlalchemy_imageattach.entity import Image, image_attachment
-from sqlalchemy.event import listens_for
 from datetime import datetime
+
+from app import db
 from flask_restful import fields
+from sqlalchemy.event import listens_for
+from sqlalchemy.ext.declarative import declared_attr
+from sqlalchemy_imageattach.entity import Image, image_attachment
 
 
-class Source(db.Model):
+class BaseTab(db.Model):
+    __abstract__ = True
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
-    link = db.Column(db.String, nullable=False)
-    content_id = db.Column(db.Integer, db.ForeignKey("content.id"))
+    file = db.Column(db.String, nullable=False)
+
+    @declared_attr
+    def content_id(cls): return db.Column(
+        db.Integer, db.ForeignKey("content.id"))
 
     marshal = {
         'name': fields.String,
@@ -17,16 +23,19 @@ class Source(db.Model):
     }
 
 
-class Other(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String, nullable=False)
-    file = db.Column(db.String, nullable=False)
-    content_id = db.Column(db.Integer, db.ForeignKey("content.id"))
+class Source(BaseTab):
+    pass
 
-    marshal = {
-        'name': fields.String,
-        'file': fields.String,
-    }
+class Audio(BaseTab):
+    pass
+
+
+class Other(BaseTab):
+    pass
+
+
+class Download(BaseTab):
+    pass
 
 
 class Content(db.Model):
@@ -36,8 +45,10 @@ class Content(db.Model):
     cover_art = db.Column(db.String)
     created_at = db.Column(db.DateTime, default=datetime.now)
     script = db.Column(db.Text, nullable=False)
-    source = db.relationship("Source", backref="content", uselist=True)
-    other = db.relationship("Other", backref="content", uselist=True)
+    source = db.relationship("Source", backref="content", uselist=True, lazy="dynamic")
+    audio = db.relationship("Audio", backref="content", uselist=True, lazy="dynamic")
+    other = db.relationship("Other", backref="content", uselist=True, lazy="dynamic")
+    download = db.relationship("Download", backref="content", uselist=True, lazy="dynamic")
 
     @property
     def cover_art_thumbnail(self):
@@ -77,4 +88,3 @@ def delete_cover_art(mapper, connection, target):
         except OSError:
             # Don't care if was not deleted because it does not exist
             pass
-

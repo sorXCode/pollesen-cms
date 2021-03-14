@@ -1,21 +1,40 @@
 from flask_admin.contrib.sqla import ModelView
 from flask_admin import form
 from .forms import CKTextAreaField
-from .models import Source, Other
+from .models import Source, Other, Download, Audio, Content
+from app import db
+
+
+def attach_file_field(path="file",**kwargs):
+    return form.FileUploadField(base_path=f"static/{path}/",
+                                **kwargs,
+                                relative_path=path)
 
 
 class ContentView(ModelView):
     inline_models = (Source,
+                     (Audio, {
+                         'form_overrides': {
+                             'file': form.FileUploadField
+                         },
+                         'form_extra_fields': {
+                             'file': attach_file_field("other", allowed_extensions=("mp3", "mp4", "m4a", "wav", "wma", "flac", "aac"))
+                         }
+                     }),
                      (Other, {
                          'form_overrides': {
                              'file': form.FileUploadField
                          },
                          'form_extra_fields': {
-                             'file': form.FileUploadField(
-                                 base_path="static/other/",
-                                 relative_path='other')
+                             'file': attach_file_field("other")
                          }
-                     }),)
+                     }),
+                     (Download, {
+                         'form_extra_fields': {
+                             'file': attach_file_field("download")
+                         }
+                     }),
+                     )
     column_editable_list = ['title', ]
     can_export = True
 
@@ -33,3 +52,8 @@ class ContentView(ModelView):
             url_relative_path='cover_art/',
             thumbnail_size=(200, 200, True))
     }
+
+    def __init__(self, *args, **kwargs):
+        model = Content
+        session = db.session
+        super().__init__(model, session, *args, **kwargs)

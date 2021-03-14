@@ -35,6 +35,7 @@ def create_app(environment):
 
         pass
 
+
     app = Flask(__name__)
     app.config.from_object(config[environment])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
