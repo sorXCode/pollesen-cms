@@ -6,9 +6,10 @@ from flask import Flask, session
 from flask_migrate import Migrate
 from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
-from config import config
+from config import config, Config
 from flask_pagedown import PageDown
 from flask_rest_paginate import Pagination
+from flask_admin.contrib.fileadmin.s3 import S3FileAdmin, S3Storage
 
 
 # load envrionment variables from '.env' file
@@ -28,13 +29,13 @@ def create_app(environment):
 
     def register_blueprints(app):
         from content import AdminContentView, content_bp
-        # from flask_admin.contrib.fileadmin.s3 import S3FileAdmin
-        
+
         admin.add_view(AdminContentView)
+        admin.add_view(S3FileAdmin(bucket_name=Config.S3_BUCKET_NAME, region=Config.S3_REGION,
+                                   aws_access_key_id=Config.AWS_ACCESS_KEY_ID, aws_secret_access_key=Config.AWS_SECRET_ACCESS_KEY))
         app.register_blueprint(content_bp)
 
         pass
-
 
     app = Flask(__name__)
     app.config.from_object(config[environment])

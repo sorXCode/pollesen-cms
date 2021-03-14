@@ -14,6 +14,7 @@ class Config:
     USER_APP_NAME = "CMS"      # Shown in and email templates and page footers
     USE_S3 = True
     S3_BUCKET_NAME = "6d5c3e43b8fb4fd8ac6c72ea99925ff5"
+    S3_REGION = os.environ["S3_REGION"]
     AWS_ACCESS_KEY_ID = os.environ["AWS_ACCESS_KEY_ID"]
     AWS_SECRET_ACCESS_KEY = os.environ["AWS_SECRET_ACCESS_KEY"]
     MAX_CONTENT_LENGTH = 16 * 1024 * 1024

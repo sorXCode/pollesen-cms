@@ -22,6 +22,9 @@ class BaseTab(db.Model):
         'link': fields.String,
     }
 
+    def __repr__(self):
+        return self.name
+
 
 class Source(BaseTab):
     pass

@@ -12,6 +12,18 @@ def attach_file_field(path="file",**kwargs):
 
 
 class ContentView(ModelView):
+    column_editable_list = ['title', ]
+    column_searchable_list = ['title', 'subtitle', ]
+    column_filters = ['title', 'id', 'subtitle', ]
+    # column_list = ["id","title","subtitle","cover_art","script","source","audio","other","download"]
+    edit_modal = True
+    can_export = True
+    page_size = 50
+    extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
+    can_view_details = True
+    column_display_pk = True
+    column_hide_backrefs = False
+
     inline_models = (Source,
                      (Audio, {
                          'form_overrides': {
