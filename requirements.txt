@@ -5,3 +5,4 @@ python-dotenv==0.15.0
 pillow==8.1.2
 flask-admin-s3-upload==0.1.4
 flask-restful==0.3.8 
+flask-rest-paginate==1.1.2

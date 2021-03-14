@@ -8,6 +8,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_admin import Admin
 from config import config
 from flask_pagedown import PageDown
+from flask_rest_paginate import Pagination
 
 
 # load envrionment variables from '.env' file
@@ -16,14 +17,14 @@ load_dotenv()
 
 db = SQLAlchemy()
 admin = Admin()
-page_down = PageDown()
+pagination = Pagination()
 
 
 def create_app(environment):
     def init_dependencies(app):
         db.init_app(app)
         admin.init_app(app=app)
-        page_down.init_app(app=app)
+        pagination.init_app(app, db)
 
     def register_blueprints(app):
         from content import AdminContentView, content_bp
