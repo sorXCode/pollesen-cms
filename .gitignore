@@ -1,3 +1,6 @@
 venv
 *py[cab]
 .vscode
+migrations
+*sqlite*
+static
