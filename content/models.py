@@ -6,12 +6,13 @@ from datetime import datetime
 
 class Content(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(), nullable=False)
-    subtitle = db.Column(db.String(), nullable=False)
-    cover_art = db.Column(db.String())
-    script = db.Column(db.Text(), nullable=False)
+    title = db.Column(db.String, nullable=False)
+    subtitle = db.Column(db.String, nullable=False)
+    cover_art = db.Column(db.String)
+    script = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.now)
     source = db.relationship("Source", backref="content", uselist=True)
+    other = db.relationship("Other", backref="content", uselist=True)
 
 
     def __repr__(self):
@@ -33,5 +34,10 @@ class Source(db.Model):
     name = db.Column(db.String, nullable=False)
     link = db.Column(db.String, nullable=False)
     content_id = db.Column(db.Integer, db.ForeignKey("content.id"))
-    # content = db.relationship("Content", back_populates="source")
 
+
+class Other(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    file = db.Column(db.String, nullable=False)
+    content_id = db.Column(db.Integer, db.ForeignKey("content.id"))
