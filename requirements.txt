@@ -8,3 +8,4 @@ flask-restful==0.3.8
 flask-rest-paginate==1.1.2
 filedepot==0.8.0
 boto3==1.17.27
+psycopg2-binary==2.8.6

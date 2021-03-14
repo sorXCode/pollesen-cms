@@ -15,7 +15,7 @@ pip install -r requirements.txt
 
 ## Database Requirement
 
-RDMS databases(PostgreSQL, MySQL) url should be specified in the `.env` file
+PostgreSQL database url should be specified in the `.env` file
 If the url is absent, Sqlite3 would be used
 
 NOTE: To run website, create a local `.env` file from the `.env.example` file at the application root.
