@@ -8,7 +8,6 @@ from dep import storage
 from depot.manager import DepotManager
 from flask_admin.contrib.fileadmin.s3 import S3FileAdmin, S3Storage
 from flask_rest_paginate import Pagination
-from flask_pagedown import PageDown
 from config import config, Config
 from flask_admin import Admin
 from flask_sqlalchemy import SQLAlchemy
@@ -19,7 +18,7 @@ from datetime import timedelta
 
 
 db = SQLAlchemy()
-admin = Admin()
+admin = Admin(name="CMS", url='/cms')
 pagination = Pagination()
 
 
@@ -42,7 +41,7 @@ def create_app(environment):
     app = Flask(__name__)
     app.config.from_object(config[environment])
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-    app.config['FLASK_ADMIN_SWATCH'] = 'Slate'
+    app.config['FLASK_ADMIN_SWATCH'] = os.environ.get("THEME_SWATCH") or 'Slate'
     # app.jinja_env.filters['zip'] = zip
 
     init_dependencies(app)
