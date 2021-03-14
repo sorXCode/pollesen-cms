@@ -26,11 +26,10 @@ def create_app(environment):
         page_down.init_app(app=app)
 
     def register_blueprints(app):
-        from content import AdminContentView, AdminSourceView
+        from content import AdminContentView
         # from flask_admin.contrib.fileadmin.s3 import S3FileAdmin
         
         admin.add_view(AdminContentView)
-        admin.add_view(AdminSourceView)
 
         pass
 

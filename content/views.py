@@ -33,7 +33,3 @@ class ContentView(ModelView):
             url_relative_path='cover_art/',
             thumbnail_size=(200, 200, True))
     }
-
-
-class SourceView(ModelView):
-    pass
