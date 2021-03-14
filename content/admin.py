@@ -2,10 +2,10 @@ from flask_admin.contrib.sqla import ModelView
 from flask_admin import form
 from .forms import CKTextAreaField
 from .models import Source, Other, Download, Audio, Content
-from app import db
+from app import db, storage
+import tempfile
 
-
-def attach_file_field(path="file",**kwargs):
+def attach_file_field(path="file", **kwargs):
     return form.FileUploadField(base_path=f"static/{path}/",
                                 **kwargs,
                                 relative_path=path)
@@ -16,7 +16,7 @@ class ContentView(ModelView):
     column_searchable_list = ['title', 'subtitle', ]
     column_filters = ['title', 'id', 'subtitle', ]
     # column_list = ["id","title","subtitle","cover_art","script","source","audio","other","download"]
-    edit_modal = True
+    # edit_modal = True
     can_export = True
     page_size = 50
     extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
@@ -25,27 +25,9 @@ class ContentView(ModelView):
     column_hide_backrefs = False
 
     inline_models = (Source,
-                     (Audio, {
-                         'form_overrides': {
-                             'file': form.FileUploadField
-                         },
-                         'form_extra_fields': {
-                             'file': attach_file_field("other", allowed_extensions=("mp3", "mp4", "m4a", "wav", "wma", "flac", "aac"))
-                         }
-                     }),
-                     (Other, {
-                         'form_overrides': {
-                             'file': form.FileUploadField
-                         },
-                         'form_extra_fields': {
-                             'file': attach_file_field("other")
-                         }
-                     }),
-                     (Download, {
-                         'form_extra_fields': {
-                             'file': attach_file_field("download")
-                         }
-                     }),
+                     Audio,
+                     Other,
+                     Download,
                      )
     column_editable_list = ['title', ]
     can_export = True
@@ -53,16 +35,15 @@ class ContentView(ModelView):
     extra_js = ['//cdn.ckeditor.com/4.6.0/standard/ckeditor.js']
 
     form_overrides = {
-        'cover_art': form.ImageUploadField,
+        'cover_art': form.FileUploadField,
         'script': CKTextAreaField
     }
 
     # Pass additional parameters to 'path' to FileUploadField constructor
     form_extra_fields = {
-        'cover_art': form.ImageUploadField(
-            base_path="static/cover_art/",
-            url_relative_path='cover_art/',
-            thumbnail_size=(200, 200, True))
+        'cover_art': form.FileUploadField(
+            base_path=tempfile.gettempdir()
+            )
     }
 
     def __init__(self, *args, **kwargs):

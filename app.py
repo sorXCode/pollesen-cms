@@ -1,19 +1,21 @@
-import os
-from datetime import timedelta
 
 from dotenv import load_dotenv
-from flask import Flask, session
-from flask_migrate import Migrate
-from flask_sqlalchemy import SQLAlchemy
-from flask_admin import Admin
-from config import config, Config
-from flask_pagedown import PageDown
-from flask_rest_paginate import Pagination
-from flask_admin.contrib.fileadmin.s3 import S3FileAdmin, S3Storage
-
-
 # load envrionment variables from '.env' file
 load_dotenv()
+
+
+from dep import storage
+from depot.manager import DepotManager
+from flask_admin.contrib.fileadmin.s3 import S3FileAdmin, S3Storage
+from flask_rest_paginate import Pagination
+from flask_pagedown import PageDown
+from config import config, Config
+from flask_admin import Admin
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
+from flask import Flask, session
+import os
+from datetime import timedelta
 
 
 db = SQLAlchemy()
